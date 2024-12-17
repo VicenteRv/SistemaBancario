@@ -1,0 +1,130 @@
+:root {
+    --color-primary: #05161A;
+    --color-secondary: #0C7075;
+    --color-tertiary: #0C7075;
+    --color-neutral-light: #6DA5C0;
+    --color-neutral-dark: #294D61;
+    --color-accent: #072E33;
+}
+
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background-color: #05161A; /* Fondo general */
+    background-image: url(imagenes/aurora_bank_logo.png);
+    background-repeat: no-repeat;
+    background-size: 100%; /* Haz el logo más grande */
+    background-position: center; /* Mantén el logo centrado */
+    background-blend-mode: multiply; /* Mezcla colores para un efecto elegante */
+    opacity: 0.9; /* Ajusta la visibilidad general del fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+
+.atm-container {
+    position: relative;
+    background-color: #072E33; /* Fondo del cajero automático */
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-name {
+    font-weight: 700; /* Destacar el texto */
+    background-color: var(--color-secondary);
+    color: var(--color-neutral-light);
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.buttons-layout {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.actions-container-left, .actions-container-right, .actions-container-bottom {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.actions-container-left {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.actions-container-right {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.actions-container-bottom {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row; /* Botones en línea horizontal */
+    gap: 20px;
+}
+
+.action button {
+    background-color: #294D61; /* Fondo de los botones */
+    color: #6DA5C0; /* Texto de los botones */
+    border: 2px solid #294D61; /* Borde de los botones */
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+}
+
+button {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 500;
+    background-color: var(--color-tertiary);
+    color: var(--color-neutral-light);
+    border: 2px solid var(--color-neutral-dark);
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#date-time-display {
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: var(--color-neutral-dark);
+    color: var(--color-neutral-light);
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--color-secondary);
+    border-color: var(--color-accent);
+}

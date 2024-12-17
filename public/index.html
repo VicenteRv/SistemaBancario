@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="./css/estilos.css">
+</head>
+<body>
+    <h1>Login</h1>
+    <form id="loginForm">
+        <!-- Input para Tarjeta -->
+        <label for="tarjeta">Tarjeta:</label>
+        <input type="text" id="tarjeta" name="tarjeta" placeholder="Número de tarjeta" required>
+        <br><br>
+
+        <!-- Input para NIP -->
+        <label for="nip">NIP:</label>
+        <input type="password" id="nip" name="nip" placeholder="NIP" required>
+        <br><br>
+
+        <!-- Botón para Enviar -->
+        <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <!-- Contenedor para mostrar los errores -->
+    <div id="errorMessages" style="color: red; display: none;">
+        <!-- Los errores se mostrarán aquí -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault(); // Evita que el formulario se envíe de manera tradicional
+
+                const tarjeta = document.getElementById('tarjeta').value;
+                const nip = document.getElementById('nip').value;
+                
+                // Limpiar mensajes de error previos
+                document.getElementById('errorMessages').innerHTML = '';
+                document.getElementById('errorMessages').style.display = 'none';
+
+                try {
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ tarjeta, nip })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert('Login exitoso');
+                        localStorage.setItem('token', data.token);  // Guarda el token
+                        localStorage.setItem('uid', data.uid);  // Guarda uid
+                        window.location.href = 'Examen.html';  // Redirige a la página de servicios
+                    } else {
+                        // Mostrar los errores en la interfaz de usuario
+                        if (data.errors && data.errors.length > 0) {
+                            let errorMessages = '';
+                            data.errors.forEach(error => {
+                                errorMessages += `<p><strong>${error.msg}</strong> en el campo: ${error.path}</p>`;
+                            });
+
+                            // Mostrar los errores en el contenedor
+                            document.getElementById('errorMessages').innerHTML = errorMessages;
+                            document.getElementById('errorMessages').style.display = 'block';
+                        } else {
+                            alert(data.msg);  // Si no se encuentra el formato de errores, muestra el mensaje genérico
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error en el proceso de login');
+                }
+            });
+        });
+    </script>              
+</body>
+</html>

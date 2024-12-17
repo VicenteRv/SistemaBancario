@@ -1,0 +1,81 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Contenedor del formulario */
+.login-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    margin: 10px;
+}
+
+/* Campos del formulario */
+label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Estilo para el botón */
+button {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para los mensajes de error */
+#errorMessages {
+    color: red;
+    margin-top: 15px; /* Mayor espacio entre el formulario y los errores */
+    padding: 15px; /* Más espacio dentro del contenedor de los errores */
+    background-color: #ffe6e6;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    display: none;
+}
+
+#errorMessages p {
+    margin: 5px 0; /* Espacio entre cada mensaje de error */
+    font-size: 14px;
+}

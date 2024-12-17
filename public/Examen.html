@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica Cajero Automático</title>
+    <script>
+        function displayDateTime() {
+            const now = new Date();
+            const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            const dateStr = `${dayName}, ${day} de ${month} de ${year}`;
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+
+            document.getElementById('current-date').textContent = dateStr;
+            document.getElementById('current-time').textContent = timeStr;
+        }
+
+        setInterval(displayDateTime, 1000);
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0B0F14;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .atm-container {
+            background-color: #12222D;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 60%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .user-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #6DA5C0;
+        }
+
+        #date-time-display {
+            margin-bottom: 20px;
+        }
+
+        /* Contenedor con Grid */
+        .buttons-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+            grid-template-rows: repeat(2, auto); /* Dos filas */
+            gap: 20px; /* Espacio entre botones */
+            justify-items: center;
+         margin-top: 20px;
+        }
+
+
+        /* Botones */
+        .buttons-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+    grid-template-rows: repeat(2, auto); /* Dos filas */
+    gap: 20px; /* Espacio uniforme entre botones */
+    justify-items: center; /* Centra los botones horizontalmente */
+    align-items: center; /* Centra los botones verticalmente */
+    margin-top: 20px; /* Espacio entre el título y botones */
+}
+
+.buttons-layout button {
+    width: 200px; /* Ajusta el ancho del botón */
+    height: 60px; /* Ajusta la altura del botón */
+    border: none;
+    border-radius: 8px;
+    background-color: #1E5A7A; /* Color base */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.buttons-layout button:hover {
+    background-color: #3C8BBE; /* Efecto hover */
+    transform: scale(1.05); /* Ligeramente más grande al pasar el mouse */
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 60px; /* Centra el texto en el botón */
+}
+
+    </style>
+</head>
+<body onload="displayDateTime()">
+    <div class="atm-container">
+        <div class="user-name">
+            <img src="images/logo_aurora_solo.png" alt="Aurora Bank Logo" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px;">
+            Bienvenido, Usuario
+        </div>
+        <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
+            <div id="current-date" style="font-size: 16px;"></div>
+            <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
+        </div>
+        <div class="buttons-layout">
+            <button><a href="Retiro.html">Retiro de efectivo</a></button>
+            <button><a href="ConsultaSaldo.html">Consulta de saldo</a></button>
+            <button><a href="Deposito.html">Depósitos en efectivo</a></button>
+            <button><a href="ConsultaMov.html">Consulta de movimientos</a></button>
+            <button><a href="Tarjeta.html">Pago de tarjeta de crédito</a></button>
+            <button><a href="Servicios.html">Pago de servicios</a></button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Verificar si el token está en localStorage
+        const token = localStorage.getItem('token');
+    
+        // Si no existe el token, redirigir al login
+        if (!token) {
+            window.location.href = 'index.html';  // Redirige al login si no hay token
+        } else {
+            // Si hay un token, permitir el acceso a la página
+            console.log("Token encontrado, acceso permitido.");
+        }
+    });
+    </script>
+    
+    
+</body>
+</html>

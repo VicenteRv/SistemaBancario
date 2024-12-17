@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depósito de Efectivo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function displayDateTime() {
+            const now = new Date();
+            const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            const dateStr = `${dayName}, ${day} de ${month} de ${year}`;
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+
+            document.getElementById('current-date').textContent = dateStr;
+            document.getElementById('current-time').textContent = timeStr;
+        }
+
+        setInterval(displayDateTime, 1000);
+    </script>
+    <style>
+        .balance-container {
+            background-color: var(--color-secondary);
+            color: var(--color-neutral-light);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .action-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        button {
+            width: 200px;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--color-neutral-dark);
+            color: var(--color-neutral-light);
+            border: 2px solid var(--color-neutral-dark);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: var(--color-secondary);
+            border-color: var(--color-accent);
+        }
+    </style>
+</head>
+<body onload="displayDateTime()">
+    <div class="atm-container">
+        <div class="user-name">
+            <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
+            Depósito de Efectivo
+        </div>
+        <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
+            <div id="current-date" style="font-size: 16px;"></div>
+            <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
+        </div>
+        <div class="balance-container">
+            Saldo actual: <strong>$0.00</strong>
+        </div>
+        <div class="action-container">
+            <button>Depositar $100</button>
+            <button>Depositar $500</button>
+            <button>Depositar $1000</button>
+            <button>Otra cantidad</button>
+            <button> <a href="Examen.html" class="btn">Regresar</a></button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Verificar si el token está en localStorage
+        const token = localStorage.getItem('token');
+    
+        // Si no existe el token, redirigir al login
+        if (!token) {
+            window.location.href = 'index.html';  // Redirige al login si no hay token
+        } else {
+            // Si hay un token, permitir el acceso a la página
+            console.log("Token encontrado, acceso permitido.");
+        }
+    });
+    </script>
+</body>
+</html>
