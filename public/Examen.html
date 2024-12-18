@@ -60,55 +60,45 @@
             margin-bottom: 20px;
         }
 
-        /* Contenedor con Grid */
+        /* Botones ajustados */
         .buttons-layout {
             display: grid;
             grid-template-columns: repeat(3, 1fr); /* Tres columnas */
-            grid-template-rows: repeat(2, auto); /* Dos filas */
             gap: 20px; /* Espacio entre botones */
-            justify-items: center;
-         margin-top: 20px;
+            margin-top: 20px;
         }
 
+        .buttons-layout button {
+            width: 100%; /* Ancho fijo para evitar desbordamientos */
+            height: 65px; /* Altura fija */
+            background-color: #1E5A7A;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center; /* Centra verticalmente el texto */
+            justify-content: center; /* Centra horizontalmente el texto */
+            transition: transform 0.2s, background-color 0.3s;
+            overflow: hidden; /* Evita el desbordamiento del texto */
+            text-align: center;
+        }
 
-        /* Botones */
-        .buttons-layout {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Tres columnas */
-    grid-template-rows: repeat(2, auto); /* Dos filas */
-    gap: 20px; /* Espacio uniforme entre botones */
-    justify-items: center; /* Centra los botones horizontalmente */
-    align-items: center; /* Centra los botones verticalmente */
-    margin-top: 20px; /* Espacio entre el título y botones */
-}
+        .buttons-layout button:hover {
+            background-color: #3C8BBE;
+            transform: scale(1.05);
+        }
 
-.buttons-layout button {
-    width: 200px; /* Ajusta el ancho del botón */
-    height: 60px; /* Ajusta la altura del botón */
-    border: none;
-    border-radius: 8px;
-    background-color: #1E5A7A; /* Color base */
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.3s;
-}
-
-.buttons-layout button:hover {
-    background-color: #3C8BBE; /* Efecto hover */
-    transform: scale(1.05); /* Ligeramente más grande al pasar el mouse */
-}
-
-a {
-    text-decoration: none;
-    color: white;
-    display: block;
-    width: 100%;
-    height: 100%;
-    line-height: 60px; /* Centra el texto en el botón */
-}
-
+        .buttons-layout a {
+            color: white;
+            text-decoration: none;
+            display: block; /* Ocupa todo el botón */
+            width: 100%;
+            height: 80%;
+            line-height: 25px; /* Centra el texto verticalmente */
+        }
     </style>
 </head>
 <body onload="displayDateTime()">
@@ -132,19 +122,13 @@ a {
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-        // Verificar si el token está en localStorage
-        const token = localStorage.getItem('token');
-    
-        // Si no existe el token, redirigir al login
-        if (!token) {
-            window.location.href = 'index.html';  // Redirige al login si no hay token
-        } else {
-            // Si hay un token, permitir el acceso a la página
-            console.log("Token encontrado, acceso permitido.");
-        }
-    });
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+            } else {
+                console.log("Token encontrado, acceso permitido.");
+            }
+        });
     </script>
-    
-    
 </body>
 </html>

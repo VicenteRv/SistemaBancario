@@ -74,29 +74,89 @@
             <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
         </div>
         <div class="balance-container">
-            Saldo actual: <strong>$0.00</strong>
+            Saldo actual: <strong id="saldo">$0.00</strong>
         </div>
         <div class="action-container">
-            <button>Depositar $100</button>
-            <button>Depositar $500</button>
-            <button>Depositar $1000</button>
-            <button>Otra cantidad</button>
-            <button> <a href="Examen.html" class="btn">Regresar</a></button>
+            <button onclick="realizarDeposito(100)">Depositar $100</button>
+            <button onclick="realizarDeposito(500)">Depositar $500</button>
+            <button onclick="realizarDeposito(1000)">Depositar $1000</button>
+            <button onclick="window.location.href = 'Examen.html'">Regresar</button>
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Verificar si el token está en localStorage
-        const token = localStorage.getItem('token');
-    
-        // Si no existe el token, redirigir al login
-        if (!token) {
-            window.location.href = 'index.html';  // Redirige al login si no hay token
-        } else {
-            // Si hay un token, permitir el acceso a la página
-            console.log("Token encontrado, acceso permitido.");
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Verificar si el token está en localStorage
+            const token = localStorage.getItem('token');
+            const userId = localStorage.getItem('uid');  // Obtener el ID del usuario desde localStorage
+
+            if (!token) {
+                window.location.href = 'index.html';  // Redirige al login si no hay token
+            } else {
+                console.log("Token encontrado, acceso permitido.");
+            }
+
+            // Consultar el saldo al cargar la página
+            try {
+                // Realizar la petición al backend para obtener el saldo
+                const response = await fetch('/api/operaciones/consultarSaldo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-token': token,  // Enviar el token con la solicitud
+                    },
+                    body: JSON.stringify({ id: userId })  // Enviar el ID del usuario en el cuerpo de la solicitud
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Actualizar el saldo en la interfaz de usuario
+                    document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
+                } else {
+                    console.error('Error al obtener el saldo:', data.msg);
+                }
+            } catch (error) {
+                console.error('Error en la petición:', error);
+                alert('Hubo un error al intentar obtener el saldo.');
+            }
+        });
+
+        // Función para realizar el depósito
+        async function realizarDeposito(monto) {
+            const token = localStorage.getItem('token'); // Obtener el token del localStorage
+            const userId = localStorage.getItem('uid');  // Obtener el ID del usuario del localStorage
+
+            if (!token || !userId) {
+                alert("Token o ID de usuario no encontrado. Redirigiendo...");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                // Petición al backend
+                const response = await fetch('/api/operaciones/depositoEfectivo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-token': token,
+                    },
+                    body: JSON.stringify({ id: userId, monto }), // Enviar el ID y el monto
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Depósito exitoso de $${monto}`);
+                    // Actualizar el saldo mostrado
+                    document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
+                } else {
+                    alert(`Error: ${data.msg || 'No se pudo completar el depósito.'}`);
+                }
+            } catch (error) {
+                console.error('Error en la petición:', error);
+                alert('Hubo un error al realizar el depósito.');
+            }
         }
-    });
     </script>
 </body>
 </html>

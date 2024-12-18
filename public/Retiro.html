@@ -69,34 +69,98 @@
             <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
             Retiro de Efectivo
         </div>
+        <!-- Fecha y Hora -->
         <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
             <div id="current-date" style="font-size: 16px;"></div>
             <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
         </div>
+
+        <!-- Saldo actual -->
         <div class="balance-container">
-            Saldo actual: <strong>$0.00</strong>
+            Saldo actual: <strong id="saldo">$0.00</strong>
         </div>
+
+        <!-- Botones de retiro -->
         <div class="action-container">
-            <button>Retirar $100</button>
-            <button>Retirar $500</button>
-            <button>Retirar $1000</button>
-            <button>Otra cantidad</button>
-            <button> <a href="Examen.html" class="btn">Regresar</a></button>
+            <button onclick="realizarRetiro(100)">Retirar $100</button>
+            <button onclick="realizarRetiro(500)">Retirar $500</button>
+            <button onclick="realizarRetiro(1000)">Retirar $1000</button>
+            <button>
+                <a href="Examen.html" class="btn">Regresar</a>
+            </button>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-        // Verificar si el token está en localStorage
-        const token = localStorage.getItem('token');
-    
-        // Si no existe el token, redirigir al login
-        if (!token) {
-            window.location.href = 'index.html';  // Redirige al login si no hay token
-        } else {
-            // Si hay un token, permitir el acceso a la página
-            console.log("Token encontrado, acceso permitido.");
+            // Verificar si el token está en localStorage
+            const token = localStorage.getItem('token');
+        
+            // Si no existe el token, redirigir al login
+            if (!token) {
+                window.location.href = 'index.html';  // Redirige al login si no hay token
+            } else {
+                // Si hay un token, permitir el acceso a la página
+                console.log("Token encontrado, acceso permitido.");
+            }
+        });
+        //consultarSaldo
+        document.addEventListener('DOMContentLoaded', async function () {
+            const token = localStorage.getItem('token');  // Recupera el token del localStorage
+            const userId = localStorage.getItem('uid');   // Recupera el ID del usuario del localStorage
+
+            try {
+                // Petición al backend para consultar el saldo
+                const response = await fetch('/api/operaciones/consultarSaldo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-token': token,  // Envía el token en el encabezado para autenticación
+                    },
+                    body: JSON.stringify({ id: userId })  // Envía el ID del usuario en el cuerpo
+                });
+
+                const data = await response.json();  // Convierte la respuesta a JSON
+
+                if (response.ok) {
+                    // Actualiza el saldo en el HTML si la petición fue exitosa
+                    document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
+                } else {
+                    console.error('Error al obtener el saldo:', data.msg);  // Mensaje de error del backend
+                }
+            } catch (error) {
+                console.error('Error en la petición:', error);  // Error en la solicitud (red u otro)
+                alert('Hubo un error al intentar obtener el saldo.');
+            }
+        });
+        // Función para realizar el depósito
+        async function realizarRetiro(monto) {
+            const token = localStorage.getItem('token'); // Obtener el token del localStorage
+            const userId = localStorage.getItem('uid');  // Obtener el ID del usuario del localStorage
+            try {
+                // Petición al backend
+                const response = await fetch('/api/operaciones/retiroEfectivo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-token': token,
+                    },
+                    body: JSON.stringify({ id: userId, monto }), // Enviar el ID y el monto
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Retiro exitoso de $${monto}`);
+                    // Actualizar el saldo mostrado
+                    document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
+                } else {
+                    alert(`Error: ${data.msg || 'No se pudo completar el depósito.'}`);
+                }
+            } catch (error) {
+                console.error('Error en la petición:', error);
+                alert('Hubo un error al realizar el depósito.');
+            }
         }
-    });
     </script>
 </body>
 </html>

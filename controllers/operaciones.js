@@ -15,17 +15,40 @@ const consultarSaldo = async(req = request, res = response) =>{
     res.json({
         saldo: usuario.saldo
     })
-    
 } 
-const retiroEfectivo = (req = request, res = response) =>{
+const retiroEfectivo = async(req = request, res = response) =>{
+    const { id, monto } = req.body;
+    const usuario = await Usuario.findById(id);
+
+    // Validar si tiene saldo suficiente
+    if (usuario.saldo < monto) {
+        return res.status(400).json({
+            msg: 'Saldo insuficiente. No puede retirar más de lo que tiene.',
+            saldoActual: usuario.saldo,
+        });
+    }
+    // Actualizar el saldo del usuario
+    usuario.saldo = Number(usuario.saldo) - Number(monto);
+    await usuario.save();
+
+    // Responder con el nuevo saldo
     res.json({
-        msg: 'controlador de operacion retiro de efectivo'
-    })
+        msg: 'Retiro realizado con éxito.',
+        saldo: usuario.saldo,
+    });
 } 
-const depositoEfectivo = (req = request, res = response) =>{
+const depositoEfectivo = async(req = request, res = response) =>{
+    const { id, monto } = req.body;
+    const usuario = await Usuario.findById(id);
+
+    // Actualizar el saldo del usuario
+    usuario.saldo += monto;
+    await usuario.save();
+
     res.json({
-        msg: 'controlador de operacion deposito en efectivo'
-    })
+        msg: 'Depósito realizado con éxito',
+        saldo: usuario.saldo,
+    });
 } 
 const pagoTarjeta = (req = request, res = response) =>{
     res.json({
