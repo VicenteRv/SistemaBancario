@@ -9,7 +9,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
             try {
-                console.log('entramos a examen');
                 const response = await fetch('api/auth/verificarJWT', {
                     method: 'POST',
                     headers: {
@@ -49,7 +48,7 @@
             <button onclick="setMontoRetiro(500)">Retirar $500</button>
             <button onclick="setMontoRetiro(1000)">Retirar $1000</button>
             <!-- Campo para ingresar una cantidad diferente -->
-            <input type="number" id="cantidadDiferente" placeholder="Cantidad a depositar" />
+            <input type="number" id="cantidadDiferente" placeholder="Cantidad a Retirar" />
             <!-- Campo para la descripción del depósito -->
             <input type="text" id="descripcion" placeholder="Descripción (opcional)" />
             <button onclick="realizarRetiro()">Retirar</button>

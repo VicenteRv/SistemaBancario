@@ -11,7 +11,7 @@ const movimientoSchema = new Schema({
     enum: ['deposito', 'retiro', 'transferencia', 'pago_servicio'],
     required: true,
   },
-  monto: {
+  monto: {  
     type: Number,
     required: true,
   },

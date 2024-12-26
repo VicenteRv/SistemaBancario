@@ -29,7 +29,6 @@ body {
     position: relative;
     background-color: #072E33; /* Fondo del cajero automático */
     width: 50%;
-    height: 60%px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     display: flex;

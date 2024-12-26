@@ -4,9 +4,9 @@ const {
     consultarSaldo,
     retiroEfectivo,
     depositoEfectivo,
-    pagoTarjeta,
     pagoServicios,
     consultaMovimientos,
+    transferencia,
 } = require('../controllers/operaciones');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { validarCampos } = require('../middlewares/validar-campos');
@@ -20,7 +20,7 @@ router.post('/consultarSaldo',[
     validarCampos
 ], consultarSaldo);
 // Ruta para consultar movimientos
-router.get('/consultaMovimientos',[
+router.get('/consulta-Movimientos',[
     validarJWT,
     validarCampos
 ], consultaMovimientos);
@@ -40,7 +40,7 @@ router.post('/depositoEfectivo',[
 router.post('/pagoTarjeta',[
     validarJWT,
     validarCampos
-], pagoTarjeta);
+], transferencia);
 
 // Ruta para pagar servicios
 router.post('/pagoServicios',[

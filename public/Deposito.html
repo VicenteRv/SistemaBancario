@@ -9,7 +9,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
             try {
-                console.log('entramos a examen');
                 const response = await fetch('api/auth/verificarJWT', {
                     method: 'POST',
                     headers: {
@@ -76,7 +75,6 @@
         //consultar saldo
         document.addEventListener('DOMContentLoaded', async function () {
             try {
-                // Realizar la petición al backend para obtener el saldo
                 const response = await fetch('/api/operaciones/consultarSaldo', {
                     method: 'POST',
                     headers: {

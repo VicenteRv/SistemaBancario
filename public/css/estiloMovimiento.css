@@ -1,0 +1,80 @@
+/* Contenedor principal de los movimientos */
+.movements-container {
+    background-color: var(--color-neutral-dark);
+    color: var(--color-neutral-light);
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    max-height: 450px; /* Controlamos la altura máxima */
+    overflow-y: auto; /* Permitimos el scroll vertical si hay demasiados movimientos */
+    border: 1px solid #ccc; /* Borde sutil */
+    width: 60%;
+}
+/* Ocultamos la barra de desplazamiento, pero permitimos el desplazamiento */
+.movements-container::-webkit-scrollbar {
+    width: 0px;  /* No se muestra la barra de desplazamiento */
+    background: transparent; /* Fondo transparente */
+}
+/* Estilo de los movimientos individuales */
+.movement {
+    margin: 10px 0;
+    padding: 10px;
+    border-bottom: 1px solid var(--color-neutral-dark); /* Se mantiene el borde entre los movimientos */
+    background-color: #333; /* Fondo más oscuro para cada movimiento */
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* El último movimiento no tendrá borde inferior */
+.movement:last-child {
+    border-bottom: none;
+}
+
+/* Estilo para los botones */
+button {
+    width: 200px;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--color-neutral-dark);
+    color: var(--color-neutral-light);
+    border: 2px solid var(--color-neutral-dark);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 6%;
+    margin-bottom: 6%;
+}
+
+button:hover {
+    background-color: #444; /* Cambio de color cuando el botón es hovered */
+    border-color: #999; /* Cambio en el borde al hacer hover */
+}
+
+/* Estilo para los movimientos dentro del contenedor */
+.movement strong {
+    color: #4CAF50; /* Verde para el tipo de movimiento */
+    font-size: 18px;
+}
+
+.movement span {
+    display: block;
+    margin-top: 5px;
+    color: #fff; /* Blanco para la descripción */
+}
+
+.movement small {
+    color: #888; /* Gris para la fecha */
+    font-size: 20px;
+    display: block;
+    margin-top: 5px;
+}
+
+.atm-container {
+    height: 80%;
+}
+
+.numMov{
+    padding: 10px;
+    color: white;
+}

@@ -1,14 +1,6 @@
 const {request, response } = require('express');
 const { Usuario, Movimiento } = require('../models');
 
-
-const operacionesPermitidas = [
-    'retiroEfectivo',
-    'depositoEfectivo',
-    'pagoTarjeta',
-    'pagoServicios',
-    'consultaMovimientos'
-];
 const consultarSaldo = async(req = request, res = response) =>{
     const id = req.usuario.id;
     const usuario = await Usuario.findById(id);
@@ -69,8 +61,41 @@ const depositoEfectivo = async(req = request, res = response) => {
         saldo: usuario.saldo,
     });
 };
+const consultaMovimientos = async (req = request, res = response) => {
+    try {
+        const { id } = req.usuario;
+        const [total, movimientos] = await Promise.all([
+            Movimiento.countDocuments({ usuario: id }),
+            Movimiento.find({ usuario: id }).sort({ fecha: -1 }).populate('usuario','nombre')
+        ]);
+        // Formateamos la fecha de cada movimiento de forma entendible usando Intl.DateTimeFormat
+        const fechaFormato = new Intl.DateTimeFormat('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+        const fechaFormateada = movimientos.map(movimiento => {
+            return {
+                ...movimiento.toObject(),
+                fecha: fechaFormato.format(new Date(movimiento.fecha))  // Formato: 26/12/2024, 15:30:45
+            };
+        });
+        res.json({
+            total,
+            movimientos: fechaFormateada
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: 'Hubo un error al obtener los en el back',
+        });
+    }
+};
 
-const pagoTarjeta = (req = request, res = response) =>{
+const transferencia = (req = request, res = response) =>{
     res.json({
         msg: 'controlador de operacion pago de tarjeta'
     })
@@ -80,16 +105,11 @@ const pagoServicios = (req = request, res = response) =>{
         msg: 'controlador de operacion pago de servicios'
     })
 } 
-const consultaMovimientos = (req = request, res = response) =>{
-    res.json({
-        msg: 'controlador de operacion consulta de movimientos'
-    })
-} 
 module.exports = {
     consultarSaldo,
     retiroEfectivo,
     depositoEfectivo,
-    pagoTarjeta,
+    transferencia,
     pagoServicios,
     consultaMovimientos,
 };

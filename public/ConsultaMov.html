@@ -4,7 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultar Movimientos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/estiloMovimiento.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                const response = await fetch('/api/auth/verificarJWT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    window.location.href = '/index.html';
+                }
+            } catch (error) {
+                console.error('Error al verificar el JWT:', error);
+                window.location.href = '/index.html';
+            }
+        });
+    </script>
+</head>
+<body onload="displayDateTime()">
+    <div class="atm-container">
+        <div class="user-name">
+            <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
+            Consultar Movimientos
+        </div>
+        <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
+            <div id="current-date" style="font-size: 16px;"></div>
+            <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
+        </div>
+        <div class="numMov">
+            <strong id="nMov"> </strong> movimientos
+        </div>
+        <!-- Contenedor de movimientos con scroll -->
+        <div class="movements-container" style="height: 100%; overflow-y: auto; padding: 35px; border: 1px solid #ccc; border-radius: 8px;">
+            <!-- Aquí se van a agregar los movimientos -->
+        </div>
+        <div class="action-container">
+            <button> <a href="Examen.html" class="btn">Regresar</a></button>
+        </div>
+    </div>
     <script>
         function displayDateTime() {
             const now = new Date();
@@ -23,73 +65,41 @@
 
             document.getElementById('current-date').textContent = dateStr;
             document.getElementById('current-time').textContent = timeStr;
-        }
-
-        setInterval(displayDateTime, 1000);
-    </script>
-    <style>
-        .movements-container {
-            background-color: var(--color-neutral-dark);
-            color: var(--color-neutral-light);
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .movement {
-            margin: 10px 0;
-            padding: 10px;
-            border-bottom: 1px solid var(--color-neutral-dark);
-        }
-
-        .movement:last-child {
-            border-bottom: none;
-        }
-        button {
-            width: 200px;
-            text-align: center;
-            padding: 10px;
-            background-color: var(--color-neutral-dark);
-            color: var(--color-neutral-light);
-            border: 2px solid var(--color-neutral-dark);
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
-</head>
-<body onload="displayDateTime()">
-    <div class="atm-container">
-        <div class="user-name">
-            <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
-            Consultar Movimientos
-        </div>
-        <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
-            <div id="current-date" style="font-size: 16px;"></div>
-            <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
-        </div>
-        <div class="movements-container">
-            <div class="movement">No hay movimientos registrados.</div>
-        </div>
-        <div class="action-container">
-            <button> <a href="Examen.html" class="btn">Regresar</a></button>
-        </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Verificar si el token está en localStorage
-        const token = localStorage.getItem('token');
-    
-        // Si no existe el token, redirigir al login
-        if (!token) {
-            window.location.href = 'index.html';  // Redirige al login si no hay token
-        } else {
-            // Si hay un token, permitir el acceso a la página
-            console.log("Token encontrado, acceso permitido.");
-        }
-    });
+        }setInterval(displayDateTime, 1000);
+        //cargar los movimientos
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                const movimientosContainer = document.querySelector('.movements-container');
+                // Realizar la petición al backend para obtener el saldo
+                const response = await fetch('/api/operaciones/consulta-Movimientos', {
+                    method: 'GET',
+                    headers: {  
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: "include"
+                });
+                const data = await response.json();
+                document.getElementById('nMov').innerText = `${data.total}`
+                data.movimientos.forEach(movimiento => {
+                    console.log(movimiento);
+                    const movimientoDiv = document.createElement('div');
+                    movimientoDiv.classList.add('movement');
+                    movimientoDiv.innerHTML = `
+                        <strong>${movimiento.tipo}</strong> - 
+                        <strong>${movimiento.usuario.nombre}</strong>
+                        <span>${movimiento.descripcion}</span> 
+                        <br>
+                        <span>Monto: $${movimiento.monto}</span>
+                        <br>
+                        <small>${movimiento.fecha}</small>
+                    `;
+                    movimientosContainer.appendChild(movimientoDiv);
+                });
+            } catch (error) {
+                console.error('Error en la petición:', error);
+                alert('Hubo un error al intentar obtener los movimientos.');
+            }
+        });
     </script>
 </body>
 </html>
