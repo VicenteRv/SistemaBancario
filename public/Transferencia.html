@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pago de Tarjeta</title>
+    <title>Transferencia</title>
     <link rel="stylesheet" href="styles.css">
     <script>
         function displayDateTime() {
@@ -75,19 +75,20 @@
     <div class="atm-container">
         <div class="user-name">
             <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
-            Pago de Tarjeta
+            Transferencia
         </div>
         <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
             <div id="current-date" style="font-size: 16px;"></div>
             <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
         </div>
         <div class="payment-container">
-            Ingrese los detalles de su pago:
+            Ingrese los datos de transferencia
         </div>
         <div class="form-container">
             <input type="number" placeholder="Número de tarjeta" required>
             <input type="number" placeholder="Monto a pagar" required>
-            <button>Realizar Pago</button>
+            <input type="text" placeholder="Descripcion" >
+            <button>Realizar Transferencia</button>
             <button> <a href="Examen.html" class="btn">Regresar</a></button>
         </div>
     </div>

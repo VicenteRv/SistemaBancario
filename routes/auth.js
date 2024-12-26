@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {check} = require('express-validator');
-const { login } = require('../controllers/auth');
+const { login, token } = require('../controllers/auth');
 const { validarTarjeta } = require('../helpers/tarjeta-validators');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
@@ -11,10 +11,12 @@ router.post('/login',[
     check('tarjeta','Faltan digitos a la tarjeta').isLength({min:16,max:16}),
     check('tarjeta').custom(validarTarjeta),
     check('nip','Debe de ingresar el nip').not().isEmpty(),
-    check('nip','El nip debe de contener 4 numeros').isLength({min:4}),
+    check('nip','El nip debe de contener 4 numeros').isLength({min:4,max:4}),
     validarCampos
 ],login);
 
-
-
+router.post('/verificarJWT',[
+    validarJWT,
+    validarCampos
+],token);
 module.exports = router;

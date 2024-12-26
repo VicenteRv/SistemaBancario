@@ -46,16 +46,13 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ tarjeta, nip })
+                        body: JSON.stringify({ tarjeta, nip }),
+                        credentials: 'include'
                     });
 
                     const data = await response.json();
-
                     if (response.ok) {
-                        alert('Login exitoso');
-                        localStorage.setItem('token', data.token);  // Guarda el token
-                        localStorage.setItem('uid', data.uid);  // Guarda uid
-                        window.location.href = 'Examen.html';  // Redirige a la página de servicios
+                            window.location.href = 'Examen.html'; // Redirige a la página de servicios
                     } else {
                         // Mostrar los errores en la interfaz de usuario
                         if (data.errors && data.errors.length > 0) {
@@ -72,7 +69,7 @@
                         }
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.log('Error:', error);
                     alert('Hubo un error en el proceso de login');
                 }
             });

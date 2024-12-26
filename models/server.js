@@ -1,11 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');  // Importa cookie-parser
 const { dbConnection } = require('../database/config');
 
 class Server {
 
     constructor() {
-        this.app  = express();
+        this.app  = express();  
         this.port = process.env.PORT;
         this.usuariosPath       = '/api/usuarios';
         this.operacionesPath    = '/api/operaciones';
@@ -30,6 +31,10 @@ class Server {
 
         // Lectura y parseo del body
         this.app.use( express.json() );
+
+        // Configuración de cookie-parser
+        this.app.use(cookieParser());
+        
         // Directorio Público
         this.app.use( express.static('public') );
 

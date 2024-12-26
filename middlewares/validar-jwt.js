@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario')
 
 const validarJWT = async(req = request,res = response,next)=>{
-    const token = req.header('x-token');
+    // const token = req.header('x-token');
+    const token = req.cookies.token;
     if(!token){
         return res.status(401).json({
             msg: 'No hay token en la peticion'
@@ -17,7 +18,6 @@ const validarJWT = async(req = request,res = response,next)=>{
                 msg: 'token no valido - usuario no existe en bd'
             })
         }
-        
         req.usuario = usuario;
         next();
     } catch (error) {

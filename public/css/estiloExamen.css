@@ -1,0 +1,72 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0B0F14;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.atm-container {
+    background-color: #12222D;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 60%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.user-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #6DA5C0;
+}
+
+#date-time-display {
+    margin-bottom: 20px;
+}
+
+/* Botones ajustados */
+.buttons-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+    gap: 20px; /* Espacio entre botones */
+    margin-top: 20px;
+}
+
+.buttons-layout button {
+    width: 100%; /* Ancho fijo para evitar desbordamientos */
+    height: 65px; /* Altura fija */
+    background-color: #1E5A7A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Centra verticalmente el texto */
+    justify-content: center; /* Centra horizontalmente el texto */
+    transition: transform 0.2s, background-color 0.3s;
+    overflow: hidden; /* Evita el desbordamiento del texto */
+    text-align: center;
+}
+
+.buttons-layout button:hover {
+    background-color: #3C8BBE;
+    transform: scale(1.05);
+}
+
+.buttons-layout a {
+    color: white;
+    text-decoration: none;
+    display: block; /* Ocupa todo el botón */
+    width: 100%;
+    height: 80%;
+    line-height: 25px; /* Centra el texto verticalmente */
+}

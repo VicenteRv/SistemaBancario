@@ -1,5 +1,5 @@
 const {request, response } = require('express');
-const { Usuario } = require('../models');
+const { Usuario, Movimiento } = require('../models');
 
 
 const operacionesPermitidas = [
@@ -10,14 +10,15 @@ const operacionesPermitidas = [
     'consultaMovimientos'
 ];
 const consultarSaldo = async(req = request, res = response) =>{
-    const { id } = req.body;
+    const id = req.usuario.id;
     const usuario = await Usuario.findById(id);
     res.json({
-        saldo: usuario.saldo
+        saldo: usuario.saldo,
     })
 } 
 const retiroEfectivo = async(req = request, res = response) =>{
-    const { id, monto } = req.body;
+    const { monto } = req.body;
+    const id = req.usuario.id;
     const usuario = await Usuario.findById(id);
 
     // Validar si tiene saldo suficiente
@@ -38,12 +39,21 @@ const retiroEfectivo = async(req = request, res = response) =>{
     });
 } 
 const depositoEfectivo = async(req = request, res = response) =>{
-    const { id, monto } = req.body;
+    const { monto, descripcion = "Deposito Efectivo", tipo = "deposito" } = req.body;
+    const id = req.usuario.id;
     const usuario = await Usuario.findById(id);
 
     // Actualizar el saldo del usuario
     usuario.saldo += monto;
     await usuario.save();
+    //crear el movimiento del deposito
+    const movimiento = new Movimiento({
+        usuario:id,
+        tipo,
+        monto,
+        descripcion,
+    })
+    await movimiento.save();
 
     res.json({
         msg: 'Depósito realizado con éxito',

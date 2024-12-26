@@ -4,7 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Depósito de Efectivo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/estiloDeposito.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                console.log('entramos a examen');
+                const response = await fetch('api/auth/verificarJWT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    window.location.href = '/index.html';
+                }
+            } catch (error) {
+                console.error('Error al verificar el JWT:', error);
+                window.location.href = '/index.html';
+            }
+        });
+    </script>
+</head>
+<body onload="displayDateTime()">
+    <div class="atm-container">
+        <div class="user-name">
+            <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
+            Depósito de Efectivo
+        </div>
+        <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
+            <div id="current-date" style="font-size: 16px;"></div>
+            <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
+        </div>
+        <div class="balance-container">
+            Saldo actual: <strong id="saldo">$0.00</strong>
+        </div>
+        <div class="action-container">
+            <button onclick="setMontoDeposito(100)">Depositar $100</button>
+            <button onclick="setMontoDeposito(500)">Depositar $500</button>
+            <button onclick="setMontoDeposito(1000)">Depositar $1000</button>
+            <!-- Campo para ingresar una cantidad diferente -->
+            <input type="number" id="cantidadDiferente" placeholder="Cantidad a depositar" />
+            <!-- Campo para la descripción del depósito -->
+            <input type="text" id="descripcion" placeholder="Descripción (opcional)" />
+            <button onclick="realizarDeposito()">Depositar</button>
+            <button onclick="window.location.href = 'Examen.html'">Regresar</button>
+        </div>        
+    </div>
+    
     <script>
         function displayDateTime() {
             const now = new Date();
@@ -23,78 +72,8 @@
 
             document.getElementById('current-date').textContent = dateStr;
             document.getElementById('current-time').textContent = timeStr;
-        }
-
-        setInterval(displayDateTime, 1000);
-    </script>
-    <style>
-        .balance-container {
-            background-color: var(--color-secondary);
-            color: var(--color-neutral-light);
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .action-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        button {
-            width: 200px;
-            text-align: center;
-            padding: 10px;
-            background-color: var(--color-neutral-dark);
-            color: var(--color-neutral-light);
-            border: 2px solid var(--color-neutral-dark);
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: var(--color-secondary);
-            border-color: var(--color-accent);
-        }
-    </style>
-</head>
-<body onload="displayDateTime()">
-    <div class="atm-container">
-        <div class="user-name">
-            <img src="images/aurora_bank_logo.png" alt="Aurora Bank Logo" style="width: 30px; height: 30px; vertical-align: middle; margin-right: 10px;">
-            Depósito de Efectivo
-        </div>
-        <div id="date-time-display" style="text-align: center; margin: 10px 0; color: #6DA5C0;">
-            <div id="current-date" style="font-size: 16px;"></div>
-            <div id="current-time" style="font-size: 20px; font-weight: bold;"></div>
-        </div>
-        <div class="balance-container">
-            Saldo actual: <strong id="saldo">$0.00</strong>
-        </div>
-        <div class="action-container">
-            <button onclick="realizarDeposito(100)">Depositar $100</button>
-            <button onclick="realizarDeposito(500)">Depositar $500</button>
-            <button onclick="realizarDeposito(1000)">Depositar $1000</button>
-            <button onclick="window.location.href = 'Examen.html'">Regresar</button>
-        </div>
-    </div>
-    <script>
+        }setInterval(displayDateTime, 1000);
         document.addEventListener('DOMContentLoaded', async function () {
-            // Verificar si el token está en localStorage
-            const token = localStorage.getItem('token');
-            const userId = localStorage.getItem('uid');  // Obtener el ID del usuario desde localStorage
-
-            if (!token) {
-                window.location.href = 'index.html';  // Redirige al login si no hay token
-            } else {
-                console.log("Token encontrado, acceso permitido.");
-            }
-
             // Consultar el saldo al cargar la página
             try {
                 // Realizar la petición al backend para obtener el saldo
@@ -102,13 +81,10 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-token': token,  // Enviar el token con la solicitud
                     },
-                    body: JSON.stringify({ id: userId })  // Enviar el ID del usuario en el cuerpo de la solicitud
+                    credentials: "include"
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     // Actualizar el saldo en la interfaz de usuario
                     document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
@@ -120,34 +96,68 @@
                 alert('Hubo un error al intentar obtener el saldo.');
             }
         });
+        // Variable para almacenar el monto a depositar
+        let monto = 0;
+
+        // Función para establecer el monto a depositar desde los botones
+        function setMontoDeposito(cantidad) {
+            monto = cantidad;
+            document.getElementById("cantidadDiferente").value = ""; // Limpiar el campo de cantidad diferente
+        }
 
         // Función para realizar el depósito
-        async function realizarDeposito(monto) {
-            const token = localStorage.getItem('token'); // Obtener el token del localStorage
-            const userId = localStorage.getItem('uid');  // Obtener el ID del usuario del localStorage
+        async function realizarDeposito() {
+            // Obtener la cantidad del campo "cantidadDiferente" si es diferente a 0
+            let cantidadPersonalizada = document.getElementById("cantidadDiferente").value;
 
-            if (!token || !userId) {
-                alert("Token o ID de usuario no encontrado. Redirigiendo...");
-                window.location.href = 'index.html';
+            // Si hay un valor en el campo de cantidad diferente, usar ese valor
+            if (cantidadPersonalizada) {
+                monto = parseFloat(cantidadPersonalizada);
+            }
+
+            // Validación del monto antes de proceder
+            if (isNaN(monto) || monto <= 0) {
+                alert("Por favor, ingrese una cantidad válida mayor que 0.");
                 return;
             }
 
+            // Verificar que el monto sea un número entero
+            if (!Number.isInteger(monto)) {
+                alert("La cantidad debe ser un número entero.");
+                return;
+            }
+
+            // Verificar que el monto sea un múltiplo de 50
+            if (monto % 50 !== 0) {
+                alert("La cantidad debe ser un múltiplo de 50.");
+                return;
+            }
+            
+            // Obtener la descripción del depósito
+            let descripcion = document.getElementById("descripcion").value.trim();
+            // Si la descripción está vacía, no la enviamos
+            if (!descripcion) {
+                descripcion = undefined;  // O simplemente no la incluimos en el body
+            }
+            document.getElementById("cantidadDiferente").value = "";
+            document.getElementById("descripcion").value = "";
             try {
                 // Petición al backend
                 const response = await fetch('/api/operaciones/depositoEfectivo', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-token': token,
                     },
-                    body: JSON.stringify({ id: userId, monto }), // Enviar el ID y el monto
+                    body: JSON.stringify({ monto, descripcion}), // Enviar el monto y la descripción
+                    credentials: "include" // Esto incluye cookies de sesión
                 });
 
+                // Verificar si la respuesta es exitosa
                 const data = await response.json();
 
                 if (response.ok) {
                     alert(`Depósito exitoso de $${monto}`);
-                    // Actualizar el saldo mostrado
+                    // Actualizar el saldo mostrado en la interfaz
                     document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
                 } else {
                     alert(`Error: ${data.msg || 'No se pudo completar el depósito.'}`);
@@ -157,6 +167,7 @@
                 alert('Hubo un error al realizar el depósito.');
             }
         }
+
     </script>
 </body>
 </html>

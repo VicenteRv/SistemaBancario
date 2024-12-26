@@ -1,0 +1,35 @@
+
+.balance-container {
+    background-color: var(--color-secondary);
+    color: var(--color-neutral-light);
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.action-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+button {
+    width: 200px;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--color-neutral-dark);
+    color: var(--color-neutral-light);
+    border: 2px solid var(--color-neutral-dark);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: var(--color-secondary);
+    border-color: var(--color-accent);
+}
+    

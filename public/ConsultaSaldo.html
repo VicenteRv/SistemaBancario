@@ -4,64 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultar Saldo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/estiloSaldo.css">
     <script>
-        function displayDateTime() {
-            const now = new Date();
-            const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-            const dayName = days[now.getDay()];
-            const day = now.getDate();
-            const month = months[now.getMonth()];
-            const year = now.getFullYear();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            
-            const dateStr = `${dayName}, ${day} de ${month} de ${year}`;
-            const timeStr = `${hours}:${minutes}:${seconds}`;
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                console.log('entramos a examen');
+                const response = await fetch('api/auth/verificarJWT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
 
-            document.getElementById('current-date').textContent = dateStr;
-            document.getElementById('current-time').textContent = timeStr;
-        }
-
-        setInterval(displayDateTime, 1000);
+                if (!response.ok) {
+                    window.location.href = '/index.html';
+                }
+            } catch (error) {
+                console.error('Error al verificar el JWT:', error);
+                window.location.href = '/index.html';
+            }
+        });
     </script>
-    <style>
-        .balance-container {
-            background-color: var(--color-secondary);
-            color: var(--color-neutral-light);
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .action-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        button {
-            width: 200px;
-            text-align: center;
-            padding: 10px;
-            background-color: var(--color-neutral-dark);
-            color: var(--color-neutral-light);
-            border: 2px solid var(--color-neutral-dark);
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: var(--color-secondary);
-            border-color: var(--color-accent);
-        }
-    </style>
 </head>
 <body onload="displayDateTime()">
     <div class="atm-container">
@@ -81,46 +46,47 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Verificar si el token está en localStorage
-        const token = localStorage.getItem('token');
+        function displayDateTime() {
+            const now = new Date();
+            const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
             
-        // Si no existe el token, redirigir al login
-        if (!token) {
-            window.location.href = 'index.html';  // Redirige al login si no hay token
-        } else {
-            // Si hay un token, permitir el acceso a la página
-            console.log("Token encontrado, acceso permitido.");
+            const dateStr = `${dayName}, ${day} de ${month} de ${year}`;
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+
+            document.getElementById('current-date').textContent = dateStr;
+            document.getElementById('current-time').textContent = timeStr;
+        }
+        setInterval(displayDateTime, 1000);
+    document.addEventListener('DOMContentLoaded', async function () {
+        try {
+            // Realizar la petición al backend para obtener el saldo
+            const response = await fetch('/api/operaciones/consultarSaldo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (response.ok) {
+                // Actualizar el saldo en la interfaz de usuario
+                document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
+            } else {
+                console.error('Error al obtener el saldo:', data.msg);
+            }
+        } catch (error) {
+            console.error('Error en la petición:', error);
+            alert('Hubo un error al intentar obtener el saldo.');
         }
     });
-    document.addEventListener('DOMContentLoaded', async function () {
-            const token = localStorage.getItem('token');
-            const userId = localStorage.getItem('uid');  // Obtener el ID del usuario desde localStorage
-
-            try {
-                // Realizar la petición al backend para obtener el saldo
-                const response = await fetch('/api/operaciones/consultarSaldo', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-token': token,  // Enviar el token con la solicitud
-                    },
-                    body: JSON.stringify({ id: userId })  // Enviar el ID del usuario en el cuerpo de la solicitud
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Actualizar el saldo en la interfaz de usuario
-                    document.getElementById('saldo').innerText = `$${data.saldo.toFixed(2)}`;
-                } else {
-                    console.error('Error al obtener el saldo:', data.msg);
-                }
-            } catch (error) {
-                console.error('Error en la petición:', error);
-                alert('Hubo un error al intentar obtener el saldo.');
-            }
-        });
     </script>
 </body>
 </html>

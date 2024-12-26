@@ -34,7 +34,6 @@ const calcularDigitoLuhn = (numeroBase) => {
 
 // Función para validar una tarjeta usando el algoritmo de Luhn
 const validarTarjeta = (tarjeta) => {
-    console.log("Tarjeta recibida para validación:", tarjeta);
     let suma = 0;
     let shouldDouble = false;
     // Recorremos la tarjeta de derecha a izquierda
@@ -49,7 +48,6 @@ const validarTarjeta = (tarjeta) => {
     }
     // Si la suma no es divisible por 10, lanzamos un error
     if (suma % 10 !== 0) {
-        console.log("Tarjeta no válida:", tarjeta);
         throw new Error('La tarjeta no es válida');
     }
     return true;
