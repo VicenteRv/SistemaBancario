@@ -41,6 +41,7 @@
         <div class="balance-container">
             Saldo actual: <strong id="saldo">$0.00</strong>
         </div>
+        <!-- Botones de deposito -->
         <div class="action-container">
             <button onclick="setMontoDeposito(100)">Depositar $100</button>
             <button onclick="setMontoDeposito(500)">Depositar $500</button>
@@ -53,7 +54,6 @@
             <button onclick="window.location.href = 'Examen.html'">Regresar</button>
         </div>        
     </div>
-    
     <script>
         function displayDateTime() {
             const now = new Date();
@@ -73,8 +73,8 @@
             document.getElementById('current-date').textContent = dateStr;
             document.getElementById('current-time').textContent = timeStr;
         }setInterval(displayDateTime, 1000);
+        //consultar saldo
         document.addEventListener('DOMContentLoaded', async function () {
-            // Consultar el saldo al cargar la página
             try {
                 // Realizar la petición al backend para obtener el saldo
                 const response = await fetch('/api/operaciones/consultarSaldo', {
